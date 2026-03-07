@@ -11,8 +11,8 @@ class Case:
         return{
             "Case_id":self.case_id,
             "Title":self.title,
+            "Assigned_officer":self.assigned_officer,
             "Description":self.desc,
             "Status":self.status,
-            "Assigned_officer":self.assigned_officer,
             "Date_created":self.date_created
         }
