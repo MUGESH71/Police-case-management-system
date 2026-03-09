@@ -3,19 +3,15 @@ import os
 
 DATA_FILE="data/data.json"
 
-def load_case():
-    if not os.path.exists(DATA_FILE):
-        return []
+def load_data(section):
     with open(DATA_FILE,"r") as file:
         data=json.load(file)
-        return data.get("cases",[])
+        return data.get(section,[])
     
-def save_case(case):
-    with open(DATA_FILE,"r") as file:
+def save_data(section,datas):
+    with open(DATA_FILE,"r")as file:
         data=json.load(file)
-    
-    data["cases"]=case
 
-    with open(DATA_FILE,"w") as file:
+    data[section].append(datas)
+    with open(DATA_FILE,"w")as file:
         json.dump(data,file,indent=4)
-
