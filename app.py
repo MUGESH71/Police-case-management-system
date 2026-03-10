@@ -3,9 +3,10 @@ import pandas as pd
 from models.case import Case
 from models.officer import Officer
 from utils import load_data,save_data
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 st.title("Police Case Management System")
-st.header("Welcome to Dashboard")
 
 menu=st.sidebar.selectbox(
     "Menu",
@@ -107,8 +108,7 @@ elif menu== "Register Case":
 
             st.success("Registered sucessfully")
 
-elif menu=="Assign Officer to Case":
-    pass
+
 elif menu=="Search Case":
     cases=load_data("cases")
     st.header("Search Case")
@@ -126,15 +126,98 @@ elif menu=="Search Case":
             else:
                 st.write("Case not found")
 
-elif menu=="Update Case Status":
-    pass
 elif menu == "Case Dashboard":
-    pass
 
+    st.subheader("📊 Case Analytics Dashboard")
+    st.divider()
 
+    sns.set_style("whitegrid")
+    sns.set_palette("pastel")
 
+    case = load_data("cases")
+    officers = load_data("officers")
 
+    df_cases = pd.DataFrame(case)
+    df_officers = pd.DataFrame(officers)
 
+    col1, col2, col3 = st.columns(3)
 
+    col1.metric("Total Cases", len(df_cases))
+    col2.metric("Open Cases", (df_cases["Case status"]=="Open").sum())
+    col3.metric("Closed Cases", (df_cases["Case status"]=="Closed").sum())
 
+    st.divider()
 
+    col1, col2 = st.columns(2)
+
+    with col1:
+        fig, ax = plt.subplots(figsize=(6,4))
+
+        sns.countplot(
+            x="Case status",
+            data=df_cases,
+            palette="Set2",
+            ax=ax
+        )
+
+        for container in ax.containers:
+            ax.bar_label(container)
+
+        ax.set_title("Case Status Distribution", fontsize=13, fontweight="bold")
+        ax.set_xlabel("Case Status")
+        ax.set_ylabel("Number of Cases")
+
+        plt.xticks(rotation=20)
+        plt.tight_layout()
+
+        st.pyplot(fig)
+
+    with col2:
+        fig, ax = plt.subplots(figsize=(6,4))
+
+        sns.countplot(
+            y="Assigned officer",
+            data=df_cases,
+            order=df_cases["Assigned officer"].value_counts().index,
+            palette="viridis",
+            ax=ax
+        )
+
+        for container in ax.containers:
+            ax.bar_label(container)
+
+        ax.set_title("Cases per Officer", fontsize=13, fontweight="bold")
+
+        plt.tight_layout()
+
+        st.pyplot(fig)
+
+    st.divider()
+
+    status_counts = df_cases["Case status"].value_counts()
+
+    fig, ax = plt.subplots(figsize=(6,6))
+
+    status_counts.plot(
+        kind="pie",
+        autopct="%1.1f%%",
+        startangle=90,
+        pctdistance=0.8,
+        wedgeprops={"edgecolor": "black"},
+        ax=ax
+    )
+
+    ax.set_title("Case Status Breakdown", fontsize=14, fontweight="bold")
+    ax.set_ylabel("")
+
+    centre_circle = plt.Circle((0,0), 0.60, fc="white")
+    fig.gca().add_artist(centre_circle)
+
+    plt.tight_layout()
+
+    st.pyplot(fig)
+
+    st.divider()
+
+    if st.checkbox("Show raw case data"):
+        st.dataframe(df_cases)

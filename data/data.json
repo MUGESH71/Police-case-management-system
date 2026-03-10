@@ -1,5 +1,46 @@
 {
-    "cases": [],
+    "cases": [
+        {
+        "Case ID": "SEC-2026-0042",
+        "Case title": "Unauthorized Access - Server Room B",
+        "Case description": "Motion sensors triggered at 03:15 AM. CCTV shows a person in maintenance gear attempting to bypass biometric scanners. Audit required.",
+        "Assigned officer": "Sarah Jenkins",
+        "Case status": "Open",
+        "Date Created": "2026-03-08"
+    },
+    {
+        "Case ID": "FRAUD-9910-X",
+        "Case title": "Flagged Transaction Anomalies - Vendor 88",
+        "Case description": "Automated flags raised on three consecutive payments exceeding $50,000. Routing numbers do not match the approved vendor profile.",
+        "Assigned officer": "Marcus Thorne",
+        "Case status": "Open",
+        "Date Created": "2026-03-09"
+    },
+    {
+        "Case ID": "CYBER-552-SOC",
+        "Case title": "Potential Phishing Campaign - HR Dept",
+        "Case description": "Multiple employees reported emails disguised as payroll updates. Three users clicked the link; endpoint isolation has been initiated.",
+        "Assigned officer": "Elena Rodriguez",
+        "Case status": "Open",
+        "Date Created": "2026-03-10"
+    },
+    {
+        "Case ID": "IP-LIT-2026-01",
+        "Case title": "Trademark Infringement - Project Zenith",
+        "Case description": "Competitor launched a mobile app using the 'Zenith' brand name, which is currently a registered trademark in our portfolio.",
+        "Assigned officer": "David Wu",
+        "Case status": "Open",
+        "Date Created": "2026-03-05"
+    },
+    {
+        "Case ID": "COMP-HR-112",
+        "Case title": "Workplace Safety Protocol Violation",
+        "Case description": "Report of bypassed safety interlocks on manufacturing Line 4. No injuries reported, but formal hearing and retraining are mandatory.",
+        "Assigned officer": "Jordan Smith",
+        "Case status": "Open",
+        "Date Created": "2026-03-02"
+    }
+    ],
     "officers": []
     
 }

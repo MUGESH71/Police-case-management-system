@@ -16,6 +16,7 @@ class Officer:
             "Rank":self.rank,
             "Station":self.station,
             "Case Assigned":self.case_assigned,
+            "Case Solved" :self.cases_solved,
             "Case Pending":self.case_pending,
             "Contact Number":self.contact_number
         }
