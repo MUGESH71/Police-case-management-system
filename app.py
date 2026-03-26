@@ -7,13 +7,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 
-# ---------- LOGGING ----------
 logging.basicConfig(level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# ---------- CONFIG ----------
 st.set_page_config(page_title="Police CMS", layout="wide")
 
-# ---------- STYLING ----------
 st.markdown("""
 <style>
 .main {
@@ -62,11 +59,9 @@ textarea {
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- HEADER ----------
 st.markdown("<h1 style='text-align:center;'>🚔 Police Case Management System</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center; color:gray;'>Smart • Clean • Actually Usable</p>", unsafe_allow_html=True)
 
-# ---------- MENU ----------
 menu = st.sidebar.selectbox("Menu", [
     "Register Officer",
     "Search Officers",
@@ -77,7 +72,7 @@ menu = st.sidebar.selectbox("Menu", [
     "Dashboard"
 ])
 
-# ---------- SAFE DATA WRAPPERS ----------
+
 def safe_load(section):
     try:
         return load_data(section)
@@ -96,7 +91,6 @@ def safe_save(section, data):
         logging.error(f"Save error: {e}")
         st.error("Error saving data.")
 
-# ---------- REGISTER OFFICER ----------
 if menu == "Register Officer":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("👮 Register Officer")
@@ -135,7 +129,6 @@ if menu == "Register Officer":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- SEARCH OFFICER ----------
 elif menu == "Search Officers":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔍 Search Officers")
@@ -166,7 +159,6 @@ elif menu == "Search Officers":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- REGISTER CASE ----------
 elif menu == "Register Case":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("📁 Register Case")
@@ -200,7 +192,6 @@ elif menu == "Register Case":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- ASSIGN OFFICER ----------
 elif menu == "Assign Officer":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔗 Assign Officer to Case")
@@ -229,7 +220,6 @@ elif menu == "Assign Officer":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- UPDATE STATUS ----------
 elif menu == "Update Case Status":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔄 Update Case Status")
@@ -258,7 +248,6 @@ elif menu == "Update Case Status":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- SEARCH CASE ----------
 elif menu == "Search Case":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔍 Search Case")
@@ -284,7 +273,6 @@ elif menu == "Search Case":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- DASHBOARD ----------
 elif menu == "Dashboard":
     st.subheader("📊 Analytics Dashboard")
 
