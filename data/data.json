@@ -39,8 +39,117 @@
         "Assigned officer": "Jordan Smith",
         "Case status": "Open",
         "Date Created": "2026-03-02"
-    }
+    },
+
+    {
+    "Case_id": 201,
+    "Case title": "Robbery at Jewelry Shop",
+    "Case description": "Armed robbery reported at T Nagar",
+    "Case status": "Open",
+    "Assigned officer": "Arjun Kumar",
+    "Date": "2026-03-10"
+  },
+  {
+    "Case_id": 202,
+    "Case title": "Missing Person",
+    "Case description": "College student missing for 2 days",
+    "Case status": "Under Investigation",
+    "Assigned officer": "Priya Nair",
+    "Date": "2026-03-12"
+  },
+  {
+    "Case_id": 203,
+    "Case title": "Cyber Fraud",
+    "Case description": "Online banking scam reported",
+    "Case status": "Closed",
+    "Assigned officer": "Ravi Shankar",
+    "Date": "2026-03-08"
+  },
+  {
+    "Case_id": 204,
+    "Case title": "Vehicle Theft",
+    "Case description": "Bike stolen from parking area",
+    "Case status": "Open",
+    "Assigned officer": "Vikram Singh",
+    "Date": "2026-03-15"
+  },
+  {
+    "Case_id": 205,
+    "Case title": "Domestic Violence",
+    "Case description": "Complaint filed by resident",
+    "Case status": "Under Investigation",
+    "Assigned officer": "Meena Krishnan",
+    "Date": "2026-03-14"
+  },
+  {
+    "Case_id": 206,
+    "Case title": "Drug Possession",
+    "Case description": "Suspect caught with illegal substances",
+    "Case status": "Closed",
+    "Assigned officer": "Arjun Kumar",
+    "Date": "2026-03-05"
+  },
+  {
+    "Case_id": 207,
+    "Case title": "Burglary",
+    "Case description": "House break-in reported at night",
+    "Case status": "Open",
+    "Assigned officer": "Priya Nair",
+    "Date": "2026-03-18"
+  }
     ],
-    "officers": []
+    "officers": [
+  {
+    "officer_id": 101,
+    "Name": "Arjun Kumar",
+    "Rank": "Inspector",
+    "Station": "Chennai Central",
+    "Case_Assigned": "5",
+    "Case_Pending": "2",
+    "Case_solved": "3",
+    "Contact_Number": "9876543210"
+  },
+  {
+    "officer_id": 102,
+    "Name": "Ravi Shankar",
+    "Rank": "Sub-Inspector",
+    "Station": "Coimbatore North",
+    "Case_Assigned": "3",
+    "Case_Pending": "1",
+    "Case_solved": "2",
+    "Contact_Number": "9123456780"
+  },
+  {
+    "officer_id": 103,
+    "Name": "Priya Nair",
+    "Rank": "Inspector",
+    "Station": "Madurai South",
+    "Case_Assigned": "6",
+    "Case_Pending": "3",
+    "Case_solved": "3",
+    "Contact_Number": "9988776655"
+  },
+  {
+    "officer_id": 104,
+    "Name": "Vikram Singh",
+    "Rank": "Constable",
+    "Station": "Trichy West",
+    "Case_Assigned": "2",
+    "Case_Pending": "1",
+    "Case_solved": "1",
+    "Contact_Number": "9012345678"
+  },
+  {
+    "officer_id": 105,
+    "Name": "Meena Krishnan",
+    "Rank": "Sub-Inspector",
+    "Station": "Salem Town",
+    "Case_Assigned": "4",
+    "Case_Pending": "2",
+    "Case_solved": "2",
+    "Contact_Number": "9345678901"
+  }
+
+    ]
     
 }
