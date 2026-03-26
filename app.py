@@ -5,6 +5,10 @@ from models.officer import Officer
 from utils import load_data, save_data
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
+
+# ---------- LOGGING ----------
+logging.basicConfig(level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # ---------- CONFIG ----------
 st.set_page_config(page_title="Police CMS", layout="wide")
@@ -73,9 +77,24 @@ menu = st.sidebar.selectbox("Menu", [
     "Dashboard"
 ])
 
-# ---------- HELPERS ----------
-def is_valid_number(val):
-    return val.isdigit()
+# ---------- SAFE DATA WRAPPERS ----------
+def safe_load(section):
+    try:
+        return load_data(section)
+    except FileNotFoundError:
+        st.error("Data file not found.")
+        return []
+    except Exception as e:
+        logging.error(f"Load error: {e}")
+        st.error("Error loading data.")
+        return []
+
+def safe_save(section, data):
+    try:
+        save_data(section, data)
+    except Exception as e:
+        logging.error(f"Save error: {e}")
+        st.error("Error saving data.")
 
 # ---------- REGISTER OFFICER ----------
 if menu == "Register Officer":
@@ -97,15 +116,22 @@ if menu == "Register Officer":
         contact = st.text_input("Contact Number")
 
     if st.button("➕ Add Officer"):
-        if not officer_id.isdigit():
-            st.error("Officer ID must be numeric")
-        else:
+        try:
+            if not officer_id.isdigit():
+                raise ValueError("Officer ID must be numeric")
+
             new_officer = Officer(
                 int(officer_id), name, rank, station,
                 assigned, pending, solved, contact
             )
-            save_data("officers", new_officer.to_dict())
+            safe_save("officers", new_officer.to_dict())
             st.success("Officer registered successfully")
+
+        except ValueError as ve:
+            st.error(str(ve))
+        except Exception as e:
+            logging.error(e)
+            st.error("Unexpected error occurred")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -114,21 +140,29 @@ elif menu == "Search Officers":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔍 Search Officers")
 
-    officers = load_data("officers")
+    officers = safe_load("officers")
     search = st.text_input("Enter Officer ID")
 
     if st.button("Search"):
-        if not search.isdigit():
-            st.warning("Enter valid ID")
-        else:
+        try:
+            if not search.isdigit():
+                raise ValueError("Enter valid numeric ID")
+
             found = False
             for o in officers:
-                if o["officer_id"] == int(search):
+                if o.get("officer_id") == int(search):
                     st.success("Officer Found")
                     st.json(o)
                     found = True
+
             if not found:
                 st.error("Officer not found")
+
+        except ValueError as ve:
+            st.warning(str(ve))
+        except Exception as e:
+            logging.error(e)
+            st.error("Error searching officer")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -150,12 +184,19 @@ elif menu == "Register Case":
         date = st.date_input("Date")
 
     if st.button("📌 Register"):
-        if not case_id.isdigit() or title == "":
-            st.error("Invalid input")
-        else:
+        try:
+            if not case_id.isdigit() or not title:
+                raise ValueError("Invalid input")
+
             case = Case(int(case_id), title, desc, status, officer, str(date))
-            save_data("cases", case.to_dict())
+            safe_save("cases", case.to_dict())
             st.success("Case registered")
+
+        except ValueError as ve:
+            st.error(str(ve))
+        except Exception as e:
+            logging.error(e)
+            st.error("Error registering case")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -164,21 +205,27 @@ elif menu == "Assign Officer":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔗 Assign Officer to Case")
 
-    cases = load_data("cases")
+    cases = safe_load("cases")
     cid = st.text_input("Case ID")
     officer = st.text_input("Officer Name")
 
     if st.button("Assign"):
-        updated = False
-        for c in cases:
-            if str(c["Case_id"]) == cid:
-                c["Assigned officer"] = officer
-                updated = True
-        if updated:
-            save_data("cases", cases)
-            st.success("Assigned successfully")
-        else:
-            st.error("Case not found")
+        try:
+            updated = False
+            for c in cases:
+                if str(c.get("Case_id")) == cid:
+                    c["Assigned officer"] = officer
+                    updated = True
+
+            if updated:
+                safe_save("cases", cases)
+                st.success("Assigned successfully")
+            else:
+                st.error("Case not found")
+
+        except Exception as e:
+            logging.error(e)
+            st.error("Error assigning officer")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -187,21 +234,27 @@ elif menu == "Update Case Status":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔄 Update Case Status")
 
-    cases = load_data("cases")
+    cases = safe_load("cases")
     cid = st.text_input("Case ID")
     status = st.selectbox("New Status", ["Open", "Under Investigation", "Closed"])
 
     if st.button("Update"):
-        updated = False
-        for c in cases:
-            if str(c["Case_id"]) == cid:
-                c["Case status"] = status
-                updated = True
-        if updated:
-            save_data("cases", cases)
-            st.success("Status updated")
-        else:
-            st.error("Case not found")
+        try:
+            updated = False
+            for c in cases:
+                if str(c.get("Case_id")) == cid:
+                    c["Case status"] = status
+                    updated = True
+
+            if updated:
+                safe_save("cases", cases)
+                st.success("Status updated")
+            else:
+                st.error("Case not found")
+
+        except Exception as e:
+            logging.error(e)
+            st.error("Error updating status")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -210,18 +263,24 @@ elif menu == "Search Case":
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("🔍 Search Case")
 
-    cases = load_data("cases")
+    cases = safe_load("cases")
     cid = st.text_input("Case ID")
 
     if st.button("Search"):
-        found = False
-        for c in cases:
-            if str(c["Case_id"]) == cid:
-                st.success("Case Found")
-                st.json(c)
-                found = True
-        if not found:
-            st.error("Not found")
+        try:
+            found = False
+            for c in cases:
+                if str(c.get("Case_id")) == cid:
+                    st.success("Case Found")
+                    st.json(c)
+                    found = True
+
+            if not found:
+                st.error("Not found")
+
+        except Exception as e:
+            logging.error(e)
+            st.error("Error searching case")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -229,46 +288,53 @@ elif menu == "Search Case":
 elif menu == "Dashboard":
     st.subheader("📊 Analytics Dashboard")
 
-    cases = load_data("cases")
-    df = pd.DataFrame(cases)
+    try:
+        cases = safe_load("cases")
+        df = pd.DataFrame(cases)
 
-    if df.empty:
-        st.warning("No data yet")
-    else:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
+        if df.empty:
+            st.warning("No data yet")
+        else:
+            st.markdown('<div class="card">', unsafe_allow_html=True)
 
-        c1, c2, c3 = st.columns(3)
-        c1.metric("🚨 Total", len(df))
-        c2.metric("🟡 Open", (df["Case status"]=="Open").sum())
-        c3.metric("✅ Closed", (df["Case status"]=="Closed").sum())
+            c1, c2, c3 = st.columns(3)
+            c1.metric("🚨 Total", len(df))
+            c2.metric("🟡 Open", (df["Case status"]=="Open").sum())
+            c3.metric("✅ Closed", (df["Case status"]=="Closed").sum())
 
-        st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-        col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
 
-        with col1:
+            with col1:
+                fig, ax = plt.subplots()
+                sns.countplot(x="Case status", data=df, ax=ax)
+                ax.set_title("Case Status")
+                st.pyplot(fig)
+
+            with col2:
+                fig, ax = plt.subplots()
+                sns.countplot(
+                    y="Assigned officer",
+                    data=df,
+                    order=df["Assigned officer"].value_counts().index,
+                    ax=ax
+                )
+                ax.set_title("Cases per Officer")
+                st.pyplot(fig)
+
+            st.divider()
+
             fig, ax = plt.subplots()
-            sns.countplot(x="Case status", data=df, ax=ax)
-            ax.set_title("Case Status")
+            df["Case status"].value_counts().plot(kind="pie", autopct="%1.1f%%", ax=ax)
+            ax.set_ylabel("")
             st.pyplot(fig)
 
-        with col2:
-            fig, ax = plt.subplots()
-            sns.countplot(
-                y="Assigned officer",
-                data=df,
-                order=df["Assigned officer"].value_counts().index,
-                ax=ax
-            )
-            ax.set_title("Cases per Officer")
-            st.pyplot(fig)
+            if st.checkbox("Show Data"):
+                st.dataframe(df)
 
-        st.divider()
-
-        fig, ax = plt.subplots()
-        df["Case status"].value_counts().plot(kind="pie", autopct="%1.1f%%", ax=ax)
-        ax.set_ylabel("")
-        st.pyplot(fig)
-
-        if st.checkbox("Show Data"):
-            st.dataframe(df)
+    except KeyError:
+        st.error("Missing expected columns in data.")
+    except Exception as e:
+        logging.error(e)
+        st.error("Error loading dashboard")
